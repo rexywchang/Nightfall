@@ -5,7 +5,15 @@
   "type": "module",
   "scripts": {
     "dev": "vite --port 3000",
+    "dev:crazygames": "VITE_PLATFORM=crazygames vite --port 3000",
+    "dev:poki": "VITE_PLATFORM=poki vite --port 3000",
+    "dev:gd": "VITE_PLATFORM=gd vite --port 3000",
     "build": "tsc && vite build",
+    "build:web": "VITE_PLATFORM=web tsc && VITE_PLATFORM=web vite build",
+    "build:crazygames": "VITE_PLATFORM=crazygames tsc && VITE_PLATFORM=crazygames vite build",
+    "build:poki": "VITE_PLATFORM=poki tsc && VITE_PLATFORM=poki vite build",
+    "build:gd": "VITE_PLATFORM=gd tsc && VITE_PLATFORM=gd vite build",
+    "build:all": "npm run build:web && npm run build:crazygames && npm run build:poki && npm run build:gd",
     "preview": "vite preview --port 3000"
   },
   "dependencies": {

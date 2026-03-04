@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import { gameState } from '../state/GameState';
 import { GAME_WIDTH, GAME_HEIGHT } from '../config';
+import { getPlatform } from '../platform';
 
 export class GameOverScene extends Phaser.Scene {
   constructor() {
@@ -8,6 +9,9 @@ export class GameOverScene extends Phaser.Scene {
   }
 
   create(): void {
+    const platform = getPlatform();
+    platform.gameplayStop();
+
     this.cameras.main.setBackgroundColor(0x000000);
 
     // Title
@@ -49,7 +53,11 @@ export class GameOverScene extends Phaser.Scene {
     btn.on('pointerout', () => btn.setFillStyle(0x2ecc71));
 
     btn.on('pointerdown', () => {
-      this.scene.start('Game');
+      btn.disableInteractive();
+      platform.showAd('interstitial').then(() => {
+        platform.gameplayStart();
+        this.scene.start('Game');
+      });
     });
   }
 }

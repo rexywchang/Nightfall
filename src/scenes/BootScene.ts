@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { generateTextures } from '../utils/TextureGenerator';
+import { getPlatform } from '../platform';
 
 export class BootScene extends Phaser.Scene {
   constructor() {
@@ -8,6 +9,14 @@ export class BootScene extends Phaser.Scene {
 
   create(): void {
     generateTextures(this);
-    this.scene.start('Game');
+
+    const platform = getPlatform();
+    platform.gameLoadingFinished();
+
+    // Preroll ad, then start gameplay
+    platform.showAd('interstitial').then(() => {
+      platform.gameplayStart();
+      this.scene.start('Game');
+    });
   }
 }

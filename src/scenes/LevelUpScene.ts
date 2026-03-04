@@ -1,6 +1,10 @@
 import Phaser from 'phaser';
 import { getRandomUpgrades, Upgrade } from '../systems/UpgradeSystem';
 import { GAME_WIDTH, GAME_HEIGHT } from '../config';
+import { gameState } from '../state/GameState';
+import { getPlatform } from '../platform';
+
+const AD_EVERY_N_LEVELS = 5;
 
 export class LevelUpScene extends Phaser.Scene {
   constructor() {
@@ -8,10 +12,22 @@ export class LevelUpScene extends Phaser.Scene {
   }
 
   create(): void {
+    const shouldShowAd = gameState.level % AD_EVERY_N_LEVELS === 0;
+
+    if (shouldShowAd) {
+      getPlatform().showAd('interstitial').then(() => {
+        this.showUpgradeUI();
+      });
+    } else {
+      this.showUpgradeUI();
+    }
+  }
+
+  private showUpgradeUI(): void {
     const upgrades = getRandomUpgrades(3);
 
     // Dim overlay
-    const overlay = this.add.rectangle(
+    this.add.rectangle(
       GAME_WIDTH / 2, GAME_HEIGHT / 2,
       GAME_WIDTH, GAME_HEIGHT,
       0x000000, 0.6,
